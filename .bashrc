@@ -13,3 +13,5 @@ alias tmux="tmux -2"
 #export GOBIN=$GOPATH/bin
 export PATH=$PATH:~/bin
 
+export RIPGREP_CONFIG_PATH=${HOME}/.ripgreprc
+
