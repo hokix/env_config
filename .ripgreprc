@@ -1,0 +1,6 @@
+--glob=!*.pb.*
+--glob=!build/
+--glob=!tags
+--glob=!TAGS
+--glob=!Makefile
+--glob=!common_inc
