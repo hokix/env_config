@@ -18,7 +18,7 @@ Plugin 'Mark--Karkat'
 Plugin 'a.vim'
 Plugin 'easymotion/vim-easymotion'
 "Plugin 'honza/vim-snippets'
-Plugin 'Rip-Rip/clang_complete'
+"Plugin 'Rip-Rip/clang_complete'
 Plugin 'yggdroot/indentline'
 Plugin 'godlygeek/tabular'
 Plugin 'fatih/vim-go'
@@ -28,9 +28,11 @@ Plugin 'tomasr/molokai'
 "Plugin 'nanotech/jellybeans.vim'
 Plugin 'dracula/vim'
 "Plugin 'Valloric/YouCompleteMe'
-Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'w0rp/ale'
+Plugin 'skywind3000/asyncrun.vim'
 call vundle#end()
 
 "set foldmethod=indent
@@ -86,8 +88,8 @@ colo molokai
 
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-map <F12> :!ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR>
-"map <F12> :!ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR> :!cscope -Rbq <CR> cs add cscope.out <CR>
+map <F12> :AsyncRun -strip ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR>
+"map <F12> :AsyncRun -strip ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR> :!cscope -Rbq <CR> cs add cscope.out <CR>
 
 set ts=4
 set expandtab
@@ -226,11 +228,16 @@ autocmd BufNewFile * normal G
 
 " clang_complete
 "set omnifunc=
-let g:clang_library_path='/usr/local/llvm/lib'
-let g:clang_close_preview=1
+"let g:clang_library_path='/usr/local/llvm/lib'
+"let g:clang_close_preview=1
 "map <C-]> :ClangGotoDeclaration<CR>
 "let g:clang_jumpto_declaration_key="<C-]>"
 "let g:clang_jumpto_back_key="<C-T>"
+"let g:clang_use_library=1
+"let g:clang_user_options='|| exit 0'
+"let g:clang_complete_auto = 1
+"let g:clang_debug = 1
+"set completefunc=ClangComplete
 
 " 自动关闭代码提示preview窗口
 autocmd CompleteDone * pclose
@@ -246,36 +253,35 @@ function! BuildCmakeProj(cmd)
             call mkdir("build")
         endif
         cd build
-        exec "!cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-        make -j 8
+        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
         cd -
     elseif a:cmd == "install"
         if ! isdirectory("build")
             call mkdir("build")
         endif
         cd build
-        exec "!cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-        make -j 8
-        make install
+        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8 && make install"
         cd -
     elseif a:cmd == "clean"
         cd build
-        make clean
+        :AsyncRun make clean
         cd -
     elseif a:cmd == "rebuild"
         call system("rm -rf build")
         call mkdir("build")
         cd build
-        exec "!cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-        make -j 8
+        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
         cd -
     endif
 endfu
 
-nnoremap <F6> :silent call BuildCmakeProj("build")<cr>:redraw!<cr>
-nnoremap <F7> :silent call BuildCmakeProj("install")<cr>:redraw!<cr>
-nnoremap <F10> :silent call BuildCmakeProj("clean")<cr>:redraw!<cr>
-nnoremap <F11> :silent call BuildCmakeProj("rebuild")<cr>:redraw!<cr>
+nnoremap <F6> :silent call BuildCmakeProj("build")<cr>
+nnoremap <F7> :silent call BuildCmakeProj("install")<cr>
+nnoremap <F10> :silent call BuildCmakeProj("clean")<cr>
+nnoremap <F11> :silent call BuildCmakeProj("rebuild")<cr>
+
+" asyncrun
+let g:asyncrun_open=10
 
 " doxygen
 "let g:DoxygenToolkit_interCommentTag=' * '
@@ -302,12 +308,15 @@ let g:airline_theme='molokai'
 " let g:ack_autoclose=1
 " let g:ack_default_options=" -s -H --nocolor --column"
 "let g:ack_use_dispatch = 1
-if executable('rg')
-    let g:ackprg = 'rg --vimgrep --smart-case'
-    let g:ackhighlight = 1
-endif
-cnoreabbrev Ack Ack!
-map <F4> :Ack <CR>
+"if executable('rg')
+"    let g:ackprg = 'rg --vimgrep --smart-case'
+"    let g:ackhighlight = 1
+"endif
+"cnoreabbrev Ack Ack!
+"map <F4> :Ack <CR>
+
+cnoreabbrev Ack :AsyncRun! rg --vimgrep --smart-case
+map <F4> :AsyncRun! rg --vimgrep --smart-case <cword> <CR>
 
 " quickfix window
 nmap <Leader>qo :copen<CR>
@@ -386,6 +395,19 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+" Override Colors command. You can safely do this in your .vimrc as fzf.vim
+" " will not override existing commands.
+command! -bang Colors
+  \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
+
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
 nnoremap <leader>f :FZF<cr>
 
 " buffer explorer
@@ -407,12 +429,11 @@ if has("cscope")
 endif
 
 " ale
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_text_changed = 'normal'
-"let g:ale_lint_on_enter = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 1
 "let g:ale_linters = {'c++': ['clang++', 'g++']}
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+"let g:ale_set_loclist = 0
+"let g:ale_set_quickfix = 1
 "let g:ale_open_list = 1
 "let g:ale_keep_list_window_open = 1
 let g:airline#extensions#ale#enabled = 1
@@ -437,4 +458,6 @@ let g:ale_linters = {
 \   'c': ['clang'],
 \   'python': ['pylint'],
 \}
+
+map <F3> :ALEDetail <CR>
 
