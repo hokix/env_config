@@ -33,6 +33,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'w0rp/ale'
 Plugin 'skywind3000/asyncrun.vim'
+Plugin 'edkolev/tmuxline.vim'
 call vundle#end()
 
 "set foldmethod=indent
@@ -45,7 +46,7 @@ set incsearch
 set nocompatible    " Use Vim defaults (much better!)
 set bs=indent,eol,start     " allow backspacing over everything in insert mode
 set showcmd
-set mouse=a
+set mouse=
 
 syntax on
 syntime on
@@ -88,7 +89,7 @@ colo molokai
 
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-map <F12> :AsyncRun -strip ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR>
+map <F12> :AsyncRun ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR>
 "map <F12> :AsyncRun -strip ctags -R --c++-kinds=+p --fields=+iaSl --extra=+q --exclude=*.so --exclude=*.so.* --exclude=*.la --exclude=*.a --exclude=*_bin* --exclude=*_lib* --exclude=*.bin* --exclude=*.lib* --exclude=*_include* --exclude=common_inc --languages=c++ .<CR> :!cscope -Rbq <CR> cs add cscope.out <CR>
 
 set ts=4
@@ -253,14 +254,14 @@ function! BuildCmakeProj(cmd)
             call mkdir("build")
         endif
         cd build
-        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
+        exec ":AsyncRun cmake .. -DBUILD_STD=c++11 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
         cd -
     elseif a:cmd == "install"
         if ! isdirectory("build")
             call mkdir("build")
         endif
         cd build
-        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8 && make install"
+        exec ":AsyncRun cmake .. -DBUILD_STD=c++11 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8 && make install"
         cd -
     elseif a:cmd == "clean"
         cd build
@@ -270,7 +271,7 @@ function! BuildCmakeProj(cmd)
         call system("rm -rf build")
         call mkdir("build")
         cd build
-        exec ":AsyncRun cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
+        exec ":AsyncRun cmake .. -DBUILD_STD=c++11 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make -j 8"
         cd -
     endif
 endfu
@@ -302,7 +303,8 @@ let g:airline_powerline_fonts=1
 let g:airline#extensions#whitespace#enabled=0
 " airline-theme
 "let g:airline_theme='jellybeans'
-let g:airline_theme='molokai'
+"let g:airline_theme='molokai'
+"let g:airline_theme='base16'
 
 " ack
 " let g:ack_autoclose=1
@@ -315,6 +317,7 @@ let g:airline_theme='molokai'
 "cnoreabbrev Ack Ack!
 "map <F4> :Ack <CR>
 
+cnoreabbrev ack :AsyncRun! rg --vimgrep --smart-case
 cnoreabbrev Ack :AsyncRun! rg --vimgrep --smart-case
 map <F4> :AsyncRun! rg --vimgrep --smart-case <cword> <CR>
 
@@ -449,7 +452,7 @@ let g:ale_sign_warning = 'W'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_cpp_clang_options = '-std=c++98 -Wall'
+let g:ale_cpp_clang_options = '-std=c++11 -Wall'
 "let g:ale_cpp_gcc_options = '-std=c++98 -Wall'
 let g:ale_c_parse_makefile = 1
 let g:ale_c_parse_compile_commands = 1
