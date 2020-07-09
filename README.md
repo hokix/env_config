@@ -1,3 +1,5 @@
 # env_config
 
-My linux environment config files.
+My Linux/Mac OS environment config files.
+
+Need minor modify on different OS.
