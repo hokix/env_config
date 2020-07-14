@@ -34,6 +34,7 @@ Plugin 'jlanzarotta/bufexplorer'
 Plugin 'w0rp/ale'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'edkolev/tmuxline.vim'
+Plugin 'tpope/vim-fugitive'
 call vundle#end()
 
 "set foldmethod=indent
