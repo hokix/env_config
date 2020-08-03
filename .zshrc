@@ -72,6 +72,9 @@ plugins=(git
     tmux
     colored-man-pages
     vi-mode
+    colorize
+    git
+    jsontools
 )
 
 export ZPLUG_HOME=/usr/local/opt/zplug

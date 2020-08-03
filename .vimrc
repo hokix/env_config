@@ -25,12 +25,12 @@ Plugin 'fatih/vim-go'
 Plugin 'mileszs/ack.vim'
 " color schemes
 Plugin 'tomasr/molokai'
-"Plugin 'nanotech/jellybeans.vim'
+Plugin 'nanotech/jellybeans.vim'
 Plugin 'dracula/vim'
+Plugin 'altercation/vim-colors-solarized'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
-Plugin 'jlanzarotta/bufexplorer'
 Plugin 'w0rp/ale'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'edkolev/tmuxline.vim'
@@ -41,7 +41,8 @@ call vundle#end()
 "set foldmethod=indent
 "set foldlevel=99
 
-let mapleader=";"
+"let mapleader="\\"
+let mapleader=","
 
 set hlsearch
 set incsearch
@@ -78,16 +79,19 @@ set cursorline "cursorcolumn
 
 set tabstop=4 shiftwidth=4 softtabstop=4
 
-if bufwinnr(1)
-    map + <C-W>+
-    map - <C-W>-
-    map < <C-W><
-    map > <C-W>>
-endif
+"if bufwinnr(1)
+"    map + <C-W>+
+"    map - <C-W>-
+"    map < <C-W><
+"    map > <C-W>>
+"endif
 
 set t_Co=256
 "colo ron 
-colo molokai
+"colo molokai
+colo jellybeans
+"colo solarized
+set background=dark
 
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
@@ -112,8 +116,8 @@ let Tlist_WinWidth = 45
 
 " NERDTree
 let NERDTreeWinSize = 40
-autocmd VimEnter * if argc() == 1 | NERDTree | wincmd p | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"autocmd VimEnter * if argc() == 1 | NERDTree | wincmd p | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <F8> :NERDTreeToggle<CR>
 imap <F8> :NERDTreeToggle<CR>
 
@@ -304,8 +308,9 @@ nmap <Leader>t; :Tabularize /;\zs<CR>
 let g:airline_powerline_fonts=1
 let g:airline#extensions#whitespace#enabled=0
 " airline-theme
-"let g:airline_theme='jellybeans'
+let g:airline_theme='jellybeans'
 "let g:airline_theme='molokai'
+"let g:airline_theme='solarized'
 "let g:airline_theme='base16'
 
 " ack
@@ -319,9 +324,10 @@ let g:airline#extensions#whitespace#enabled=0
 "cnoreabbrev Ack Ack!
 "map <F4> :Ack <CR>
 
-cnoreabbrev ack :AsyncRun! rg --vimgrep --smart-case
-cnoreabbrev Ack :AsyncRun! rg --vimgrep --smart-case
+cnoreabbrev ack :AsyncRun! rg --vimgrep --smart-case 
+cnoreabbrev Ack :AsyncRun! rg --vimgrep --smart-case 
 map <F4> :AsyncRun! rg --vimgrep --smart-case <cword> <CR>
+" nmap <Leader>r :Ack 
 
 " quickfix window
 nmap <Leader>qo :copen<CR>
@@ -414,11 +420,6 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 
 nnoremap <leader>f :FZF<cr>
-
-" buffer explorer
-let g:bufExplorerShowRelativePath=1
-let g:bufExplorerShowDirectories=0
-let g:bufExplorerSplitHorzSize=15
 
 " cscope
 if has("cscope")
