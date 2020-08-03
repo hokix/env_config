@@ -312,6 +312,18 @@ let g:airline_theme='jellybeans'
 "let g:airline_theme='molokai'
 "let g:airline_theme='solarized'
 "let g:airline_theme='base16'
+let g:airline#extensions#ale#enabled = 1
+"let g:airline#extensions#tmuxline#enabled = 0
+
+" tmuxline
+let g:tmuxline_theme = 'jellybeans'
+let g:tmuxline_powerline_separators = 1
+"let g:tmuxline_separators = {
+"    \ 'left' : '',
+"    \ 'left_alt': '>',
+"    \ 'right' : '',
+"    \ 'right_alt' : '<',
+"    \ 'space' : ' '}
 
 " ack
 " let g:ack_autoclose=1
@@ -420,6 +432,7 @@ command! -bang -nargs=* Rg
   \   <bang>0)
 
 nnoremap <leader>f :FZF<cr>
+nnoremap <leader>bf :Buffers<cr>
 
 " cscope
 if has("cscope")
@@ -442,7 +455,6 @@ let g:ale_lint_on_enter = 1
 "let g:ale_set_quickfix = 1
 "let g:ale_open_list = 1
 "let g:ale_keep_list_window_open = 1
-let g:airline#extensions#ale#enabled = 1
 " ale 配置
 let g:ale_sign_column_always = 1  " 保持侧边栏可见
 let g:ale_set_highlights = 0
