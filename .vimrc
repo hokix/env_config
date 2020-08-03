@@ -324,6 +324,15 @@ let g:tmuxline_powerline_separators = 1
 "    \ 'right' : '',
 "    \ 'right_alt' : '<',
 "    \ 'space' : ' '}
+let g:tmuxline_preset = {
+    \'a'       : '#S',
+    \'b'       : '#(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)',
+    \'win'     : '#I #W',
+    \'cwin'    : '#I #W',
+    \'x'       : '#W',
+    \'y'       : '%a %Y-%m-%d %H:%M',
+    \'z'       : '#H',
+    \'options' : {'status-justify' : 'left'}}
 
 " ack
 " let g:ack_autoclose=1
