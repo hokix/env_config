@@ -3,6 +3,9 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/hokiX/.oh-my-zsh"
+PATH=$PATH:$HOME/bin:~/.vim/bundle/fzf/bin
+export FZF_BASE=~/.vim/bundle/fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -72,6 +75,7 @@ plugins=(git
     tmux
     colored-man-pages
     vi-mode
+    fzf
     colorize
     git
     jsontools
@@ -89,7 +93,7 @@ if [[ -f $ZPLUG_HOME/init.zsh ]] {
   #zplug "changyuheng/zsh-interactive-cd"
   #zplug "SleepyBag/zsh-confer"
 
-  #zplug "Powerlevel9k/powerlevel9k", from:github, as:theme, if:"[[ $ZSH_THEME_STYLE == 9k ]]"
+  zplug "romkatv/powerlevel10k", as:theme, depth:1
   #zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh-theme, from:github, as:theme, if:"[[ $ZSH_THEME_STYLE == spaceship ]]"
   #zplug "caiogondim/bullet-train.zsh", use:bullet-train.zsh-theme, from:github, as:theme, if:"[[ $ZSH_THEME_STYLE == bullet ]]"
   #zplug "skylerlee/zeta-zsh-theme", from:github, as:theme, if:"[[ $ZSH_THEME_STYLE == zeta ]]"
