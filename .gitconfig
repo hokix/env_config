@@ -1,3 +1,18 @@
 [user]
-	email = xiaohui@douyu.tv
+	email = hokix@live.com
 	name = Xiao Hui
+[core]
+	excludesfile = /home/xiaohui/.gitignore
+	editor = /home/xiaohui/.local/bin/vim
+[commit]
+	template = /home/xiaohui/.gittemplate
+[push]
+	default = simple
+[color]
+    ui = auto
+[diff]
+	tool = vimdiff
+[format]
+    pretty = format:'%Cred%h%Creset -%C(yellow)%d%Creset %an %s %Cgreen(%ad)%Creset'
+[log]
+    date = relative
