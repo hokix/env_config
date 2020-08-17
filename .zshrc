@@ -72,6 +72,7 @@ plugins=(git
     tmux
     colored-man-pages
     vi-mode
+    fzf
     colorize
     git
     jsontools
