@@ -1,0 +1,10 @@
+build
+*.pb.h
+*.pb.cc
+*.stub.h
+*.stub.cc
+*.netmsg.h
+*.netmsg.cc
+tags
+*.swp
+.dep.inc
