@@ -36,6 +36,8 @@ Plugin 'skywind3000/asyncrun.vim'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'chrisbra/SudoEdit.vim'
+Plugin 'tpope/vim-commentary'
+Plugin 'dhruvasagar/vim-zoom'
 call vundle#end()
 
 "set foldmethod=indent
@@ -314,6 +316,7 @@ let g:airline_theme='jellybeans'
 "let g:airline_theme='base16'
 let g:airline#extensions#ale#enabled = 1
 "let g:airline#extensions#tmuxline#enabled = 0
+let g:airline_section_x = '%{zoom#statusline()}'
 
 " tmuxline
 let g:tmuxline_theme = 'jellybeans'
@@ -326,10 +329,9 @@ let g:tmuxline_powerline_separators = 1
 "    \ 'space' : ' '}
 let g:tmuxline_preset = {
     \'a'       : '#S',
-    \'b'       : '#(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)',
     \'win'     : '#I #W',
     \'cwin'    : '#I #W',
-    \'x'       : '#W',
+    \'x'       : '#(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)',
     \'y'       : '%a %Y-%m-%d %H:%M',
     \'z'       : '#H',
     \'options' : {'status-justify' : 'left'}}
