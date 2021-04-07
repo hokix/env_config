@@ -490,3 +490,24 @@ let g:ale_linters = {
 
 map <F3> :ALEDetail <CR>
 
+"set colorcolumn=120
+augroup LineLengthCommands
+autocmd!
+" When a file is read or the text changes in normal or insert mode,
+" draw a column marking the maximum line length if a line exceeds this length
+autocmd BufRead,TextChanged,TextChangedI *.h,*.hpp,*.cpp,*.c,*.cc call ShowColumnIfLineTooLong(120)
+augroup END
+
+" Color the column marking the lengthLimit when the longest line in the file
+" exceeds the lengthLimit
+function! ShowColumnIfLineTooLong(lengthLimit)
+" See https://stackoverflow.com/questions/2075276/longest-line-in-vim#2982789
+let maxLineLength = max(map(getline(1,'$'), 'strwidth(v:val)'))                                                                                                                                              
+if maxLineLength > a:lengthLimit
+  " highlight ColorColumn ctermbg=red guibg=red
+  " Draw the vertical line at the first letter that exceeds the limit
+  execute "set colorcolumn=" . (a:lengthLimit + 1)
+else
+  set colorcolumn=""
+endif
+endfunction
